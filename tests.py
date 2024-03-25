@@ -48,3 +48,18 @@ with open("tests.txt") as tests_txt:
             expected_public = ed25519.Point.from_bytes(expected_public)
             public = ed25519.BasePoint().mul(secret.to_bytes())
             assert public.to_bytes() == expected_public.to_bytes()
+        if cmd == "generate_key_derivation":
+            public_ = unhexlify(splitted[1])
+            secret_ = unhexlify(splitted[2])
+            boolean_ = boolean(splitted[3])
+            if not boolean_:
+                continue
+            expected = unhexlify(splitted[4])
+            public = ed25519.Point.from_bytes(public_)
+            p = public.mul(secret_)
+            p = p.mul(b'\x08'+b'\x00'*31).to_bytes()
+            assert p.hex() == expected.hex()
+        # derive_public_key
+        # derive_secret_key
+        # generate_signature
+        # check_signature
